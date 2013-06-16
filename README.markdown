@@ -1,5 +1,28 @@
 # MWPhotoBrowser — A simple iOS photo browser
 
+**Note**: This is a fork from [mwaterfall/MWPhotoBrowser](https://github.com/mwaterfall/MWPhotoBrowser). This fork makes modifications so that the interface of the photo browser is allowed to be customized (navigation bar color/image, toolbar color/image, background color).
+
+```
+New methods added are:
+
+	- (void)changeNavigationBarTintColor:(UIColor *)color;
+	- (void)changeNavigationBarBackgroundImage:(UIImage *)image;
+	- (void)changeBackgroundColor:(UIColor *)color;
+	- (void)changeToolbarTintColor:(UIColor *)color;
+	- (void)changeToolbarBackgroundImage:(UIImage *)image;
+
+Usage:
+
+	MWPhotoBrowser *browser = [[MWPhotoBrowser alloc] initWithDelegate:self];
+    browser.displayActionButton = YES;
+    [browser changeNavigationBarTintColor:[UIColor redColor]];
+    [browser changeToolbarTintColor:[UIColor redColor]];
+    
+    [self.navigationController pushViewController:browser animated:YES];
+
+```
+
+
 MWPhotoBrowser is an implementation of a photo browser similar to the native Photos app in iOS. It can display one or more images by providing either `UIImage` objects, file paths to images on the device, or URLs to images online. The photo browser handles the downloading and caching of photos from the web seamlessly. Photos can be zoomed and panned, and optional (customisable) captions can be displayed. Works on iOS 3.2+. All strings are localisable so they can be used in apps that support multiple languages.
 
 [![Alt][screenshot1_thumb]][screenshot1]    [![Alt][screenshot2_thumb]][screenshot2]    [![Alt][screenshot3_thumb]][screenshot3]    [![Alt][screenshot4_thumb]][screenshot4]
