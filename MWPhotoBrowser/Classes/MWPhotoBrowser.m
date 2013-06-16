@@ -26,7 +26,6 @@
 @interface MWPhotoBrowser () {
     
 	// Data
-    id <MWPhotoBrowserDelegate> _delegate;
     NSUInteger _photoCount;
     NSMutableArray *_photos;
 	NSArray *_depreciatedPhotoData; // Depreciated
