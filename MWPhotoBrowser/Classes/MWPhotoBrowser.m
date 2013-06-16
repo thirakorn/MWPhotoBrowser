@@ -54,6 +54,13 @@
     UIStatusBarStyle _previousStatusBarStyle;
     UIBarButtonItem *_previousViewControllerBackButton;
     
+    // Customize Appearance
+    UIColor *_navigationBarTintColor;
+    UIImage *_navigationBarBackgroundImage;
+    UIColor *_toolbarTintColor;
+    UIImage *_toolbarBackgroundImage;
+    UIColor *_backgroundColor;
+    
     // Misc
     BOOL _displayActionButton;
 	BOOL _performingLayout;
@@ -224,7 +231,7 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
 - (void)viewDidLoad {
 	
 	// View
-	self.view.backgroundColor = [UIColor blackColor];
+	self.view.backgroundColor = ( _backgroundColor == nil ) ? [UIColor blackColor] : _backgroundColor;
 	
 	// Setup paging scrolling view
 	CGRect pagingScrollViewFrame = [self frameForPagingScrollView];
@@ -234,18 +241,18 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
 	_pagingScrollView.delegate = self;
 	_pagingScrollView.showsHorizontalScrollIndicator = NO;
 	_pagingScrollView.showsVerticalScrollIndicator = NO;
-	_pagingScrollView.backgroundColor = [UIColor blackColor];
+	_pagingScrollView.backgroundColor = ( _backgroundColor == nil ) ? [UIColor blackColor] : _backgroundColor;;
     _pagingScrollView.contentSize = [self contentSizeForPagingScrollView];
 	[self.view addSubview:_pagingScrollView];
 	
     // Toolbar
     _toolbar = [[UIToolbar alloc] initWithFrame:[self frameForToolbarAtOrientation:self.interfaceOrientation]];
-    _toolbar.tintColor = nil;
+    _toolbar.tintColor = _toolbarTintColor;
     if ([[UIToolbar class] respondsToSelector:@selector(appearance)]) {
-        [_toolbar setBackgroundImage:nil forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
-        [_toolbar setBackgroundImage:nil forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsLandscapePhone];
+        [_toolbar setBackgroundImage:_toolbarBackgroundImage forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
+        [_toolbar setBackgroundImage:_toolbarBackgroundImage forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsLandscapePhone];
     }
-    _toolbar.barStyle = UIBarStyleBlackTranslucent;
+//    _toolbar.barStyle = UIBarStyleBlackTranslucent;
     _toolbar.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth;
     
     // Toolbar Items
@@ -346,6 +353,7 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
     [super viewDidUnload];
 }
 
+
 #pragma mark - Appearance
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -359,7 +367,7 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
     // Status bar
     if (self.wantsFullScreenLayout && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         _previousStatusBarStyle = [[UIApplication sharedApplication] statusBarStyle];
-        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent animated:animated];
+//        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent animated:animated];
     }
     
     // Navigation bar appearance
@@ -410,11 +418,11 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
 #pragma mark - Nav Bar Appearance
 
 - (void)setNavBarAppearance:(BOOL)animated {
-    self.navigationController.navigationBar.tintColor = nil;
-    self.navigationController.navigationBar.barStyle = UIBarStyleBlackTranslucent;
+    self.navigationController.navigationBar.tintColor = _navigationBarTintColor;
+//    self.navigationController.navigationBar.barStyle = UIBarStyleBlackTranslucent;
     if ([[UINavigationBar class] respondsToSelector:@selector(appearance)]) {
-        [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
-        [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsLandscapePhone];
+        [self.navigationController.navigationBar setBackgroundImage:_navigationBarBackgroundImage forBarMetrics:UIBarMetricsDefault];
+        [self.navigationController.navigationBar setBackgroundImage:_navigationBarBackgroundImage forBarMetrics:UIBarMetricsLandscapePhone];
     }
 }
 
@@ -1004,11 +1012,11 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
             if ([MFMailComposeViewController canSendMail]) {
                 self.actionsSheet = [[[UIActionSheet alloc] initWithTitle:nil delegate:self
                                                         cancelButtonTitle:NSLocalizedString(@"Cancel", nil) destructiveButtonTitle:nil
-                                                        otherButtonTitles:NSLocalizedString(@"Save", nil), NSLocalizedString(@"Copy", nil), NSLocalizedString(@"Email", nil), nil] autorelease];
+                                                        otherButtonTitles:NSLocalizedString(@"Save", nil), NSLocalizedString(@"Email", nil), nil] autorelease];
             } else {
                 self.actionsSheet = [[[UIActionSheet alloc] initWithTitle:nil delegate:self
                                                         cancelButtonTitle:NSLocalizedString(@"Cancel", nil) destructiveButtonTitle:nil
-                                                        otherButtonTitles:NSLocalizedString(@"Save", nil), NSLocalizedString(@"Copy", nil), nil] autorelease];
+                                                        otherButtonTitles:NSLocalizedString(@"Save", nil), nil] autorelease];
             }
             _actionsSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
             if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
@@ -1031,8 +1039,6 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
             if (buttonIndex == actionSheet.firstOtherButtonIndex) {
                 [self savePhoto]; return;
             } else if (buttonIndex == actionSheet.firstOtherButtonIndex + 1) {
-                [self copyPhoto]; return;	
-            } else if (buttonIndex == actionSheet.firstOtherButtonIndex + 2) {
                 [self emailPhoto]; return;
             }
         }
@@ -1152,6 +1158,34 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
 		[alert show];
     }
 	[self dismissModalViewControllerAnimated:YES];
+}
+
+
+#pragma mark - Customize user interface
+
+- (void)changeNavigationBarTintColor:(UIColor *)color
+{
+    _navigationBarTintColor = [color copy];
+}
+
+- (void)changeNavigationBarBackgroundImage:(UIImage *)image
+{
+    _navigationBarBackgroundImage = [image copy];
+}
+
+- (void)changeBackgroundColor:(UIColor *)color
+{
+    _backgroundColor = [color copy];
+}
+
+- (void)changeToolbarTintColor:(UIColor *)color
+{
+    _toolbarTintColor = [color copy];
+}
+
+- (void)changeToolbarBackgroundImage:(UIImage *)image
+{
+    _toolbarBackgroundImage = [image copy];
 }
 
 @end

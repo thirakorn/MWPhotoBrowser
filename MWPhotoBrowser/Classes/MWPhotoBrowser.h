@@ -44,6 +44,13 @@
 // Set page that photo browser starts on
 - (void)setInitialPageIndex:(NSUInteger)index;
 
+// Customize user interface
+- (void)changeNavigationBarTintColor:(UIColor *)color;
+- (void)changeNavigationBarBackgroundImage:(UIImage *)image;
+- (void)changeBackgroundColor:(UIColor *)color;
+- (void)changeToolbarTintColor:(UIColor *)color;
+- (void)changeToolbarBackgroundImage:(UIImage *)image;
+
 @end
 
 
