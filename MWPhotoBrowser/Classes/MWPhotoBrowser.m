@@ -26,6 +26,7 @@
 @interface MWPhotoBrowser () {
     
 	// Data
+    id <MWPhotoBrowserDelegate> _delegate;
     NSUInteger _photoCount;
     NSMutableArray *_photos;
 	NSArray *_depreciatedPhotoData; // Depreciated
@@ -418,7 +419,7 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
 
 - (void)setNavBarAppearance:(BOOL)animated {
     self.navigationController.navigationBar.tintColor = _navigationBarTintColor;
-//    self.navigationController.navigationBar.barStyle = UIBarStyleBlackTranslucent;
+    self.navigationController.navigationBar.barStyle = UIBarStyleBlackTranslucent;
     if ([[UINavigationBar class] respondsToSelector:@selector(appearance)]) {
         [self.navigationController.navigationBar setBackgroundImage:_navigationBarBackgroundImage forBarMetrics:UIBarMetricsDefault];
         [self.navigationController.navigationBar setBackgroundImage:_navigationBarBackgroundImage forBarMetrics:UIBarMetricsLandscapePhone];
@@ -786,6 +787,13 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
     CGRect frame = self.view.bounds;// [[UIScreen mainScreen] bounds];
     frame.origin.x -= PADDING;
     frame.size.width += (2 * PADDING);
+    
+    if ( self.wantsFullScreenLayout )
+    {
+        frame.origin.y -= 64;
+        frame.size.height += 44;
+    }    
+    
     return frame;
 }
 
@@ -869,7 +877,7 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
 	if ([self numberOfPhotos] > 1) {
 		self.title = [NSString stringWithFormat:@"%i %@ %i", _currentPageIndex+1, NSLocalizedString(@"of", @"Used in the context: 'Showing 1 of 3 items'"), [self numberOfPhotos]];		
 	} else {
-		self.title = nil;
+//		self.title = nil;
 	}
 	
 	// Buttons
@@ -946,6 +954,7 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
     }
     CGFloat alpha = hidden ? 0 : 1;
 	[self.navigationController.navigationBar setAlpha:alpha];
+//    [self.navigationController setNavigationBarHidden:hidden animated:YES];  // zonghui added
 	[_toolbar setAlpha:alpha];
     for (UIView *v in captionViews) v.alpha = alpha;
 	if (animated) [UIView commitAnimations];
