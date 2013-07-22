@@ -791,7 +791,7 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
     if ( self.wantsFullScreenLayout )
     {
         frame.origin.y -= 64;
-        frame.size.height += 44;
+        frame.size.height += 64;
     }    
     
     return frame;
